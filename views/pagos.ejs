@@ -1,0 +1,87 @@
+<%- include("partials/header.ejs") %>
+   <h1>Cuentas por pagar</h1>
+   <a href="/"><button type="button" class="navbutton">Página de inicio</button></a>
+</section>
+<section class="contenido-tabla">
+    <% if (locals.informacion){ %>
+        <div id="tabla">
+            <table>
+                <tr>
+                    <th class="left">Fecha</th>
+                    <th>Nombre</th>
+                    <th>Concepto</th>
+                    <th>Importe</th>
+                    <th class="right">Modificar</th>
+                </tr>
+                <% for (var i = 0; i < informacion.length; i++){ %>
+                    <tr>
+                    
+                    <td><%= informacion[i].fecha %></td>
+                    <td><%= informacion[i].nombre %></td>
+                    <td><%= informacion[i].concepto %></td>
+                    <td><%= informacion[i].importe %></td>
+                    <td><div class="modificacion_content">
+                        <form action="/eliminar" method="POST">
+                            <input type="hidden" name="pagos" value="pagos">
+                            <input type="hidden" name="id" value="<%=informacion[i].id %>">
+                            <button type="submit" id="boton-eliminar">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
+                                    <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5m3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0z"/>
+                                    <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4zM2.5 3h11V2h-11z"/>
+                                  </svg>
+                            </button>
+                        </form>
+                        <button type="button" id="boton-editar" onclick="mostrarFormulario('<%= informacion[i].id %>', '<%= informacion[i].nombre %>', '<%= informacion[i].concepto %>', '<%= informacion[i].importe %>', '<%= informacion[i].fecha %>')">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">
+                                <path d="M12.854.146a.5.5 0 0 0-.707 0L10.5 1.793 14.207 5.5l1.647-1.646a.5.5 0 0 0 0-.708zm.646 6.061L9.793 2.5 3.293 9H3.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.207zm-7.468 7.468A.5.5 0 0 1 6 13.5V13h-.5a.5.5 0 0 1-.5-.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.5-.5V10h-.5a.5.5 0 0 1-.175-.032l-.179.178a.5.5 0 0 0-.11.168l-2 5a.5.5 0 0 0 .65.65l5-2a.5.5 0 0 0 .168-.11z"/>
+                             </svg>
+                        </button>
+                    </div>
+                </td>
+                </tr>
+                <% } %>
+            </table>
+            
+                <% } else { %>
+                    <h1> sin datos que mostrar</h1>
+        
+                <% } %>
+            <button type="button" id="registro" onclick="visibilidad();">Añadir registro</button>
+
+        </div>
+    
+    <form action="/post" method="POST" id="form_cobros" style="display:none">
+        <fieldset>
+            <input type="hidden" name="pagos" value="pagos">
+            <input type="date" name="fecha">
+            Nombre: <input type="text" name="nombre">
+            Concepto:
+            <select name="concepto">
+                <option>Escoje una opción</option>
+                <option value="préstamo">préstamo</option>
+                <option value="Proveedor">Proveedor</option>
+            </select>
+            Importe: <input type="number" name="importe" min="0" step="0.01" placeholder="importe" required>
+            <button type="submit">agregar</button>
+        </fieldset>
+        
+    </form>
+    <form action="/edit" method="POST" id="form_edit" style="display:none">
+        <fieldset>
+            <input type="hidden" name="pagos" value="pagos">
+            <input type="hidden" name="id_selected" id="id_selected">
+            <input type="date" name="fecha" id="fecha">
+            Nombre: <input type="text" name="nombre" id="nombre">
+            Concepto: <input type="text" name="concepto" id="concepto">
+            Importe: <input type="number" name="importe" min="0" step="0.01" placeholder="importe" id="importe" required>
+            <button type="submit">Editar</button>
+        </fieldset>
+        
+    </form>
+</section>
+
+   </div>
+
+   <script src="scripts.js"></script>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<%- include("partials/header.ejs") %>
+   <h1>Resultados</h1>
+   <a href="/"><button type="button" class="navbutton">Página de inicio</button></a>
+</section>
+<section class="contenido_patrimonio">
+    <% if (locals.informe_resultados && locals.fecha1 && locals.fecha2){ %>
+        <h1>Desde <%= fecha1 %> hasta <%= fecha2 %></h1>
+            <div class="card-resultados">
+            
+                <h2>Ventas totales: <%= informe_resultados["ventas"]  %> €</h2>
+                <h2>costos de producción: <%= informe_resultados["insumos"]  %> €</h2>
+                <h2>Margen bruto: <%= informe_resultados["ventas"]- informe_resultados["insumos"]  %> €</h2>
+                <h2>Nómina: <%= -informe_resultados["nomina"]  %> €</h2>
+                <h2>Arriendo: <%= -informe_resultados["arriendo"]  %> €</h2>
+                <h2>Servicios: <%= -informe_resultados["servicios"]  %> €</h2>
+                <h2>Transporte: <%= -informe_resultados["transporte"]  %> €</h2>
+                <h2>marketing: <%= -informe_resultados["marketing"]  %> €</h2>
+                <h2>impuestos: <%= -informe_resultados["impuestos"]  %> €</h2>
+                <h2>Margen neto: <%= informe_resultados["ventas"]- informe_resultados["insumos"]- informe_resultados["nomina"]- informe_resultados["arriendo"]- informe_resultados["servicios"]- informe_resultados["transporte"]- informe_resultados["marketing"]- informe_resultados["impuestos"]  %> €</h2>
+
+         
+            </div>
+                <% } else { %>
+                    <form action="/resultados" method="POST" id="form_cobros">
+                        <fieldset>
+                            indique la fecha de inicio: <input type="date" name="fecha1">
+                            indique la fecha de fin: <input type="date" name="fecha2">
+                            <button type="submit">Buscar</button>
+                        </fieldset>
+                    </form>
+        
+                <% } %>
+    </section>
+   <script src="scripts.js"></script>
+</body>
+</html>

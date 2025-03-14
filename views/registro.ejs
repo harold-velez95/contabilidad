@@ -1,0 +1,24 @@
+<%- include('partials/header.ejs') %>
+  <h1>Registrate</h1>
+</section>
+<section class="contenido-tabla">
+    <!-- Makes POST request to /register route -->
+    <form action="/register" method="POST">
+        <fieldset>
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" class="form-control" name="username">
+              </div>
+              <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" name="password">
+              </div>
+              <button type="submit" class="btn btn-dark">Register</button>
+        </fieldset>
+        
+      </form>
+
+</section>
+    <script src="scripts.js"></script>
+</body>
+</html>
