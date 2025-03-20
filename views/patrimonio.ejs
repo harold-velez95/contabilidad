@@ -7,21 +7,27 @@
             <div class="card">
                 <h1>Cuentas por cobrar</h1>
                 <h1><%= importe[0].total %> €</h1>
+                <a href="/cobros">
                 <img src="images/cc.jpg" style="width: 100px; height:100px;">
-                
+                </a>
 
             </div>
             <div class="card">
                 <h1>Cuentas por Pagar</h1>
                 <h1><%= importePagos[0].total %> €</h1>
+                <a href="/pagos">
                 <img src="images/cp.png" style="width: 100px; height:100px;">
+                </a>
                 
 
             </div>
+    
             <div class="card">
                 <h1>Tesoreria</h1>
                 <h1><%= importeTesoreria + importeTesoreria_tarjeta %> €</h1>
+                <a href="/tesoreria">
                 <img src="images/ts.png" style="width: 100px; height:100px;">
+                </a>
                 <h2>en Efectivo: <%= importeTesoreria %> € </h3>
                 <h2>en Tarjeta <%= importeTesoreria_tarjeta %> €</h3>
 

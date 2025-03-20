@@ -9,7 +9,6 @@ import session from "express-session";
 import passport from "passport";
 import { Strategy } from "passport-local";
 
-
 // Configurar __dirname en módulos ES6
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -69,6 +68,12 @@ async function resultados(user,fecha1, fecha2){
 
     return informe_resultados
 
+};
+
+function formatDate(inputDate) {
+  const date = new Date(inputDate); // Convierte el string a objeto Date
+  const formatter = new Intl.DateTimeFormat('es-ES', { month: 'long', day: 'numeric' });
+  return formatter.format(date);
 };
 
 app.get("/", (req, res) =>{
@@ -173,7 +178,9 @@ app.route("/resultados")
     .post(async(req,res) => {
         let fecha1 = req.body["fecha1"]
         let fecha2 = req.body["fecha2"]
-        let informe_resultados = await resultados(req.user.id,fecha1, fecha2);  
+        let informe_resultados = await resultados(req.user.id,fecha1, fecha2); 
+        fecha1 = formatDate(fecha1);
+        fecha2 = formatDate(fecha2); 
         res.render("resultados.ejs",{informe_resultados : informe_resultados, fecha1 : fecha1, fecha2: fecha2})});
     
 
@@ -195,12 +202,13 @@ app.get("/patrimonio", async (req, res) =>{
 });
 
 app.post("/post", (req,res) =>{
-
+  if(req.isAuthenticated()){
     let nombre = req.body["nombre"];
     let tipo_ingreso = req.body["tipo_ingreso"];
     let concepto = req.body["concepto"];
     let medio_ingreso = req.body["medio_ingreso"];
     let fecha = req.body["fecha"];
+    fecha = formatDate(fecha);
     let importe = req.body["importe"];
     if(req.body["pagos"] =="pagos"){
         db.run("INSERT INTO pagos (nombre, concepto, fecha, importe, user_id) VALUES (?, ?, ?, ?,?)",[nombre, concepto, fecha, importe,req.user.id]);
@@ -214,6 +222,10 @@ app.post("/post", (req,res) =>{
         res.redirect("/cobros");
 
     }
+
+  }
+
+    
     
 });
 
@@ -237,6 +249,7 @@ app.post("/eliminar", async (req, res) =>{
 
 app.post("/edit", async (req, res) =>{
     let fecha = req.body["fecha"];
+    fecha = formatDate(fecha);
     let importe = req.body["importe"];
     let concepto = req.body["concepto"];
     let nombre = req.body["nombre"];
