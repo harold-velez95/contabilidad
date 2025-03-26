@@ -8,7 +8,6 @@
             <table>
                 <tr>
                     <th class="left">Fecha</th>
-                    <th>Tipo de ingreso</th>
                     <th>Concepto</th>
                     <th>Medio de ingreso</th>
                     <th>Importe</th>
@@ -18,7 +17,6 @@
                     <tr>
                     
                     <td><%= informacion[i].fecha %></td>
-                    <td><%= informacion[i].tipo_ingreso %></td>
                     <td><%= informacion[i].concepto %></td>
                     <td><%= informacion[i].medio_ingreso %></td>
                     <td><%= informacion[i].importe %></td>
@@ -90,9 +88,27 @@
             <input type="hidden" name="tesoreria" value="tesoreria">
             <input type="hidden" name="id_selected" id="id_selected">
             <input type="date" name="fecha" id="fecha">
-            tipo de ingreso: <input type="text" name="tipo_ingreso" id="tipo_ingreso">
-            Concepto: <input type="text" name="concepto" id="concepto">
-            medio de ingreso: <input type="text" name="medio_ingreso" id="medio_ingreso">
+            tipo de ingreso: <select name="tipo_ingreso" id="tipo_ingreso">
+                <option value="entrada">Entrada</option>
+                <option value="salida">Salida</option>
+            </select>
+            <select name="concepto" id="concepto">
+                <option>concepto</option>
+                <option value="Venta">Venta</option>
+                <option value="Nomina">Pago nómina</option>
+                <option value="Arriendo">arriendo</option>
+                <option value="Insumos">compra insumos</option>
+                <option value="Transporte">Transporte</option>
+                <option value="Servicios">Servicios</option>
+                <option value="Impuestos">Impuestos</option>
+                <option value="Marketing">Marketing</option>
+            </select>
+            medio de ingreso: 
+            <select name="medio_ingreso" id="medio_ingreso">
+                <option>medio de ingreso</option>
+                <option value="Efectivo">Efectivo</option>
+                <option value="Tarjeta">Tarjeta</option>
+            </select>
             Importe: <input type="number" name="importe" min="0" step="0.01" placeholder="importe" id="importe" required>
             <button type="submit">Editar</button>
         </fieldset>

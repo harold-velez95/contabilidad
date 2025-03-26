@@ -1,7 +1,7 @@
 <%- include('partials/header.ejs') %>
   <h1>Login</h1>
 </section>
-<section class="contenido-tabla">
+<section class="contenido-login">
     <!-- Makes POST request to /register route -->
     <form action="/login" method="POST">
         <fieldset>
@@ -17,6 +17,15 @@
         </fieldset>
         
       </form>
+      <% if (locals.message) { %>
+        <div id="error-message">
+          <h1 style="color: red; font-weight: bold;">
+            <%= message %>
+          </h1>
+        </div>
+       
+      <% } %>
+      
       <h2><a href="/register">no tienes una cuenta? registrate aqui!</a></h2>
 
 </section>

@@ -72,7 +72,11 @@
             <input type="hidden" name="id_selected" id="id_selected">
             <input type="date" name="fecha" id="fecha">
             Nombre: <input type="text" name="nombre" id="nombre">
-            Concepto: <input type="text" name="concepto" id="concepto">
+            Concepto: <select name="concepto" id="concepto">
+                <option>Escoje una opción</option>
+                <option value="préstamo">préstamo</option>
+                <option value="Proveedor">Proveedor</option>
+            </select>
             Importe: <input type="number" name="importe" min="0" step="0.01" placeholder="importe" id="importe" required>
             <button type="submit">Editar</button>
         </fieldset>

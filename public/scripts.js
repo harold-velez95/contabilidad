@@ -30,4 +30,13 @@ function mostrarFormularioTesoreria(id, tipo_ingreso,concepto, importe, fecha, m
 
 };
 
+
+ // Espera 3 segundos (3000ms) y luego oculta el mensaje
+ setTimeout(() => {
+    const errorMessage = document.getElementById("error-message");
+    if (errorMessage) {
+      errorMessage.style.display = "none";
+    }
+  }, 2000);
+
   

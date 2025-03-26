@@ -52,6 +52,16 @@ body{
     box-shadow: 5px 5px 30px;
 }
 
+.contenido-login{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    min-width: 65%;
+    padding: 30px;
+    background-color: white;
+    box-shadow: 5px 5px 30px;
+}
 
 .card{
     width: 300px;
@@ -130,7 +140,7 @@ position:sticky;
 top:0;
 }
 
-.contenido-tabla button, .contenido_patrimonio button {
+.contenido-tabla button, .contenido_patrimonio button, .contenido-login button {
     border-radius: 20px;
     border-color: #01bc61;
     border-style: groove;
@@ -229,4 +239,52 @@ form input[type="submit"] {
     padding: 10px 20px;
     border-radius: 5px;
     cursor: pointer;
+}
+
+@media (max-width: 800px){
+   .main{
+    display: flex;
+    flex-direction: column;
+    background-color: #FBFBFB;
+    gap: 20px;
+    color: #4C585B;
+   }
+
+   .navbar{
+    width: 375px;
+    display:flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #FBFBFB;
+   }
+   .contenido{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 5px 5px 30px;
+   }
+   .contenido-tabla{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    background-color: white;
+    box-shadow: 5px 5px 30px;
+    }
+    .card-resultados{
+        display: flex;
+        flex-direction: column;
+        width: 100%;
+        justify-content: center;
+        align-items: center;
+        border-radius: 20px;
+        margin: 0px;
+        padding:10px;
+        text-align: center;
+        overflow: scroll;
+    }
 }

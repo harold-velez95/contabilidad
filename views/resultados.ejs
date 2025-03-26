@@ -10,21 +10,23 @@
                     <h2>Ventas totales: <%= informe_resultados["ventas"]  %> €</h2>
                     <h2>costos de producción: <%= informe_resultados["insumos"]  %> €</h2>
                     <hr/>
-                    <h1>Margen bruto: <%= informe_resultados["ventas"]- informe_resultados["insumos"]  %> €</h1>
+                    <h1>Margen bruto: <%= informe_resultados["ventas"]+ informe_resultados["insumos"]  %> €</h1>
                 </div>
                 <div class="card-r-h">
-                    <h2>Nómina: <%= -informe_resultados["nomina"]  %> €</h2>
-                    <h2>Arriendo: <%= -informe_resultados["arriendo"]  %> €</h2>
-                    <h2>Servicios: <%= -informe_resultados["servicios"]  %> €</h2>
-                    <h2>Transporte: <%= -informe_resultados["transporte"]  %> €</h2>
-                    <h2>marketing: <%= -informe_resultados["marketing"]  %> €</h2>
-                    <h2>impuestos: <%= -informe_resultados["impuestos"]  %> €</h2>
+                    <h2>Nómina: <%= informe_resultados["nomina"]  %> €</h2>
+                    <h2>Arriendo: <%= informe_resultados["arriendo"]  %> €</h2>
+                    <h2>Servicios: <%= informe_resultados["servicios"]  %> €</h2>
+                    <h2>Transporte: <%= informe_resultados["transporte"]  %> €</h2>
+                    <h2>marketing: <%= informe_resultados["marketing"]  %> €</h2>
+                    <h2>impuestos: <%= informe_resultados["impuestos"]  %> €</h2>
                     <hr/>
-                    <h1>Margen neto: <%= informe_resultados["ventas"]- informe_resultados["insumos"]- informe_resultados["nomina"]- informe_resultados["arriendo"]- informe_resultados["servicios"]- informe_resultados["transporte"]- informe_resultados["marketing"]- informe_resultados["impuestos"]  %> €</h1>
+                    <h1>Margen neto: <%= informe_resultados["ventas"]+ informe_resultados["insumos"]+ informe_resultados["nomina"]+ informe_resultados["arriendo"]+ informe_resultados["servicios"]+ informe_resultados["transporte"]+ informe_resultados["marketing"]+ informe_resultados["impuestos"]  %> €</h1>
                 </div>
-
-         
             </div>
+            <!-- Botón para descargar el Excel -->
+            <form action="/descargar-excel" method="GET">
+                <button type="submit">Descargar Excel</button>
+            </form>
                 <% } else { %>
                     <form action="/resultados" method="POST" id="form_cobros">
                         <fieldset>
