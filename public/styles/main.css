@@ -287,4 +287,32 @@ form input[type="submit"] {
         text-align: center;
         overflow: scroll;
     }
+    .contenido-login{
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 0px;
+        padding-top: 20px;
+        background-color: white;
+        box-shadow: 5px 5px 30px;
+    }
+    form {
+        background-color: white;
+        text-align: center;
+        width:80%;
+        
+    
+    }
+    .contenido-tabla button, .contenido_patrimonio button, .contenido-login button {
+        border-radius: 20px;
+        border-color: #01bc61;
+        border-style: groove;
+        padding: 10px;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        font-size: 15px;
+        background-color: white;
+        width:150px;
+    }
+    
 }
