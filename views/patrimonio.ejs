@@ -30,11 +30,12 @@
                 </a>
                 <h2>en Efectivo: <%= importeTesoreria %> € </h3>
                 <h2>en Tarjeta <%= importeTesoreria_tarjeta %> €</h3>
+                <h2>en Tarjeta crypto <%= importeTesoreria_tarjeta_crypto %> €</h3>
 
             </div>
             <div class="card">
                 <h1>Patrimonio total</h1>
-                <h1><%= importeTesoreria + importeTesoreria_tarjeta - importePagos[0].total + importe[0].total %> €</h1>
+                <h1><%= importeTesoreria + importeTesoreria_tarjeta + importeTesoreria_tarjeta_crypto - importePagos[0].total + importe[0].total %> €</h1>
                 <img src="images/patr.jpg" style="width: 100px; height:100px;">
             </div>
                 <% } else { %>

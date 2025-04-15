@@ -7,20 +7,19 @@
         <h1>Desde <span style="font-weight: bolder;">"<%= fecha1 %>"</span> hasta <span style="font-weight: bolder;">"<%= fecha2 %>"</span></h1>
             <div class="card-resultados">
                 <div class="card-r-h">
-                    <h2>Ventas totales: <%= informe_resultados["ventas"]  %> €</h2>
-                    <h2>costos de producción: <%= informe_resultados["insumos"]  %> €</h2>
+                    <h2>Ingresos totales: <%= informe_resultados["Ingreso"]  %> €</h2>
+                    <h2>gastos en Arriendo: <%= informe_resultados["Arriendo"]  %> €</h2>
                     <hr/>
-                    <h1>Margen bruto: <%= informe_resultados["ventas"]+ informe_resultados["insumos"]  %> €</h1>
                 </div>
                 <div class="card-r-h">
-                    <h2>Nómina: <%= informe_resultados["nomina"]  %> €</h2>
-                    <h2>Arriendo: <%= informe_resultados["arriendo"]  %> €</h2>
-                    <h2>Servicios: <%= informe_resultados["servicios"]  %> €</h2>
-                    <h2>Transporte: <%= informe_resultados["transporte"]  %> €</h2>
-                    <h2>marketing: <%= informe_resultados["marketing"]  %> €</h2>
-                    <h2>impuestos: <%= informe_resultados["impuestos"]  %> €</h2>
+                    <h2>Majo: <%= informe_resultados["Majo"]  %> €</h2>
+                    <h2>Ocio: <%= informe_resultados["Ocio"]  %> €</h2>
+                    <h2>Salud: <%= informe_resultados["Salud"]  %> €</h2>
+                    <h2>Transporte: <%= informe_resultados["Transporte"]  %> €</h2>
+                    <h2>Gym: <%= informe_resultados["Gym"]  %> €</h2>
+                    <h2>Barbero: <%= informe_resultados["Barbero"]  %> €</h2>
                     <hr/>
-                    <h1>Margen neto: <%= informe_resultados["ventas"]+ informe_resultados["insumos"]+ informe_resultados["nomina"]+ informe_resultados["arriendo"]+ informe_resultados["servicios"]+ informe_resultados["transporte"]+ informe_resultados["marketing"]+ informe_resultados["impuestos"]  %> €</h1>
+                    <h1>Margen neto: <%= informe_resultados["Ingreso"]+ informe_resultados["Ocio"]+ informe_resultados["Arriendo"]+ informe_resultados["Salud"]+ informe_resultados["Majo"]+ informe_resultados["Transporte"]+ informe_resultados["Gym"]+ informe_resultados["Barbero"]  %> €</h1>
                 </div>
             </div>
             <!-- Botón para descargar el Excel -->

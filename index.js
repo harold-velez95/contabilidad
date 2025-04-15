@@ -42,31 +42,31 @@ const db = await open({
 
 async function resultados(user,fecha1, fecha2){
     let informe_resultados ={
-        "ventas": 0,
-        "nomina": 0,
-        "arriendo" : 0,
-        "insumos": 0,
-        "transporte": 0,
-        "servicios": 0,
-        "impuestos": 0,
-        "marketing": 0
+        "Ingreso": 0,
+        "Ocio": 0,
+        "Arriendo" : 0,
+        "Majo": 0,
+        "Transporte": 0,
+        "Salud": 0,
+        "Gym": 0,
+        "Barbero": 0
     };
-    let ventas = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Venta' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
-    let nomina = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Nomina' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
+    let ingreso = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Ingreso' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
+    let ocio = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Ocio' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
     let arriendo = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Arriendo' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
-    let insumos = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Insumos' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
+    let majo = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Majo' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
     let transporte = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Transporte' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
-    let servicios = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Servicios' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
-    let impuestos = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Impuestos' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
-    let marketing = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Marketing' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
-    informe_resultados["ventas"] = ventas[0].total||0;
-    informe_resultados["nomina"] = nomina[0].total||0;
-    informe_resultados["arriendo"] = arriendo[0].total||0;
-    informe_resultados["insumos"] = insumos[0].total||0;
-    informe_resultados["transporte"] = transporte[0].total||0;
-    informe_resultados["servicios"] = servicios[0].total||0;
-    informe_resultados["impuestos"] = impuestos[0].total||0;
-    informe_resultados["marketing"] = marketing[0].total||0;
+    let salud = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Salud' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
+    let gym = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Gym' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
+    let barbero = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Barbero' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
+    informe_resultados["Ingreso"] = ingreso[0].total||0;
+    informe_resultados["Ocio"] = ocio[0].total||0;
+    informe_resultados["Arriendo"] = arriendo[0].total||0;
+    informe_resultados["Majo"] = majo[0].total||0;
+    informe_resultados["Transporte"] = transporte[0].total||0;
+    informe_resultados["Salud"] = salud[0].total||0;
+    informe_resultados["Gym"] = gym[0].total||0;
+    informe_resultados["Barbero"] = barbero[0].total||0;
 
     return informe_resultados
 
@@ -95,14 +95,14 @@ app.get("/descargar-excel", async (req, res) => {
   // Crear los datos para la hoja de Excel
   const data = [
       ["Concepto", "Total"], // Encabezados
-      ["Ventas", informe_resultados.ventas],
-      ["Nómina", informe_resultados.nomina],
+      ["Ingreso", informe_resultados.ingreso],
+      ["Ocio", informe_resultados.ocio],
       ["Arriendo", informe_resultados.arriendo],
-      ["Insumos", informe_resultados.insumos],
+      ["Majo", informe_resultados.majo],
       ["Transporte", informe_resultados.transporte],
-      ["Servicios", informe_resultados.servicios],
-      ["Impuestos", informe_resultados.impuestos],
-      ["Marketing", informe_resultados.marketing]
+      ["Salud", informe_resultados.salud],
+      ["Gym", informe_resultados.gym],
+      ["Barbero", informe_resultados.barbero]
   ];
 
   // Crear un libro de Excel
@@ -264,9 +264,12 @@ app.get("/patrimonio", async (req, res) =>{
     let salidas = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE tipo_ingreso = 'salida' and medio_ingreso = 'Efectivo' and user_id = ?",[req.user.id]);
     let entradas_tarjeta = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE tipo_ingreso = 'entrada' and medio_ingreso = 'Tarjeta' and user_id = ?",[req.user.id]);
     let salidas_tarjeta = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE tipo_ingreso = 'salida' and medio_ingreso = 'Tarjeta' and user_id = ?",[req.user.id]);
+    let salidas_tarjeta_crypto = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE tipo_ingreso = 'salida' and medio_ingreso = 'Cuenta crypto' and user_id = ?",[req.user.id]);
+    let entradas_tarjeta_crypto = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE tipo_ingreso = 'entrada' and medio_ingreso = 'Cuenta crypto' and user_id = ?",[req.user.id]);
     let importeTesoreria = entradas[0].total + salidas[0].total;
     let importeTesoreria_tarjeta = entradas_tarjeta[0].total + salidas_tarjeta[0].total;
-    res.render("patrimonio.ejs", {importe : importe, importePagos : importePagos, importeTesoreria : importeTesoreria, importeTesoreria_tarjeta : importeTesoreria_tarjeta});
+    let importeTesoreria_tarjeta_crypto = entradas_tarjeta_crypto[0].total + salidas_tarjeta_crypto[0].total;
+    res.render("patrimonio.ejs", {importe : importe, importePagos : importePagos, importeTesoreria : importeTesoreria, importeTesoreria_tarjeta : importeTesoreria_tarjeta, importeTesoreria_tarjeta_crypto : importeTesoreria_tarjeta_crypto});
   }else{
     res.redirect("/login");
   }
