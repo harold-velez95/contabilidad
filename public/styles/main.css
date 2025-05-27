@@ -387,9 +387,6 @@ form input[type="submit"] {
         color: white;
       }
       
-      .btn-mini:hover {
-        opacity: 0.9;
-      }
 
       form {
         background-color:#f9f9f9 ;
