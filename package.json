@@ -1,3 +1,4 @@
+
 {
   "name": "contabilidad",
   "version": "1.0.0",
@@ -24,3 +25,4 @@
     "xlsx": "^0.18.5"
   }
 }
+
