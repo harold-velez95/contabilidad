@@ -8,26 +8,28 @@
             <div class="card-resultados">
                 <div class="card-r-h">
                     <h2>Ingresos totales: <%= informe_resultados["Ingreso"]  %> €</h2>
-                    <h2>gastos en Arriendo: <%= informe_resultados["Arriendo"]  %> €</h2>
+                    <h2 class="gastos">gastos en Arriendo: <%= informe_resultados["Arriendo"]  %> €</h2>
                     <hr/>
                 </div>
                 <div class="card-r-h">
-                    <h2>Majo: <%= informe_resultados["Majo"]  %> €</h2>
-                    <h2>Ocio: <%= informe_resultados["Ocio"]  %> €</h2>
-                    <h2>Salud: <%= informe_resultados["Salud"]  %> €</h2>
-                    <h2>Transporte: <%= informe_resultados["Transporte"]  %> €</h2>
-                    <h2>Gym: <%= informe_resultados["Gym"]  %> €</h2>
-                    <h2>Barbero: <%= informe_resultados["Barbero"]  %> €</h2>
+                    <h2 class="gastos">Majo: <%= informe_resultados["Majo"]  %> €</h2>
+                    <h2 class="gastos">Ocio: <%= informe_resultados["Ocio"]  %> €</h2>
+                    <h2 class="gastos">Mercadona: <%= informe_resultados["Mercadona"]  %> €</h2>
+                    <h2 class="gastos">Educación: <%= informe_resultados["Educacion"]  %> €</h2>
+                    <h2 class="gastos">Salud: <%= informe_resultados["Salud"]  %> €</h2>
+                    <h2 class="gastos">Transporte: <%= informe_resultados["Transporte"]  %> €</h2>
+                    <h2 class="gastos">Gym: <%= informe_resultados["Gym"]  %> €</h2>
+                    <h2 class="gastos">Barbero: <%= informe_resultados["Barbero"]  %> €</h2>
                     <hr/>
-                    <h1>Margen neto: <%= informe_resultados["Ingreso"]+ informe_resultados["Ocio"]+ informe_resultados["Arriendo"]+ informe_resultados["Salud"]+ informe_resultados["Majo"]+ informe_resultados["Transporte"]+ informe_resultados["Gym"]+ informe_resultados["Barbero"]  %> €</h1>
+                    <h1>Margen neto: <%= informe_resultados["Ingreso"]+ informe_resultados["Ocio"]+ informe_resultados["Arriendo"]+ informe_resultados["Mercadona"]+ informe_resultados["Educacion"] +informe_resultados["Salud"]+ informe_resultados["Majo"]+ informe_resultados["Transporte"]+ informe_resultados["Gym"]+ informe_resultados["Barbero"]  %> €</h1>
                 </div>
             </div>
             <!-- Botón para descargar el Excel -->
-            <form action="/descargar-excel" method="GET">
+            <form class="btn-excel" action="/descargar-excel" method="GET">
                 <button type="submit">Descargar Excel</button>
             </form>
                 <% } else { %>
-                    <form action="/resultados" method="POST" id="form_cobros">
+                    <form class="btn-excel" action="/resultados" method="POST" id="form_cobros">
                         <fieldset>
                             indique la fecha de inicio: <input type="date" name="fecha1">
                             indique la fecha de fin: <input type="date" name="fecha2">

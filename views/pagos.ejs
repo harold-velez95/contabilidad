@@ -41,6 +41,23 @@
                 </tr>
                 <% } %>
             </table>
+            <div id="tabla-movil" class="tabla-movil">
+                <% for (var i = 0; i < informacion.length; i++){ %>
+                  <details class="registro-movil">
+                    <summary>
+                      <strong><%= informacion[i].nombre %></strong> — <%= informacion[i].importe %>€
+                    </summary>
+                    <p><strong>Fecha:</strong> <%= informacion[i].fecha %></p>
+                    <p><strong>Concepto:</strong> <%= informacion[i].concepto %></p>
+                    <form action="/eliminar" method="POST">
+                      <input type="hidden" name="pagos" value="pagos">
+                      <input type="hidden" name="id" value="<%= informacion[i].id %>">
+                      <button type="submit" class="btn-mini rojo">Eliminar</button>
+                    </form>
+                    <button class="btn-mini azul" onclick="mostrarFormulario('<%= informacion[i].id %>', '<%= informacion[i].nombre %>', '<%= informacion[i].concepto %>', '<%= informacion[i].importe %>', '<%= informacion[i].fecha %>')">Editar</button>
+                  </details>
+                <% } %>
+              </div>
             
                 <% } else { %>
                     <h1> sin datos que mostrar</h1>
@@ -68,7 +85,7 @@
     </form>
     <form action="/edit" method="POST" id="form_edit" style="display:none">
         <fieldset>
-            <input type="hidden" name="pagos" value="pagos">
+            <input type="hidden" name="tipo_dato" value="pagos">
             <input type="hidden" name="id_selected" id="id_selected">
             <input type="date" name="fecha" id="fecha">
             Nombre: <input type="text" name="nombre" id="nombre">

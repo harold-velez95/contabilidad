@@ -47,12 +47,16 @@ async function resultados(user,fecha1, fecha2){
         "Arriendo" : 0,
         "Majo": 0,
         "Transporte": 0,
+        "Mercadona": 0,
+        "Educacion": 0,
         "Salud": 0,
         "Gym": 0,
         "Barbero": 0
     };
     let ingreso = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Ingreso' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
     let ocio = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Ocio' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
+    let mercadona = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Mercadona' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
+    let educacion = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Educacion' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
     let arriendo = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Arriendo' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
     let majo = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Majo' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
     let transporte = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Transporte' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
@@ -61,6 +65,8 @@ async function resultados(user,fecha1, fecha2){
     let barbero = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Barbero' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
     informe_resultados["Ingreso"] = ingreso[0].total||0;
     informe_resultados["Ocio"] = ocio[0].total||0;
+    informe_resultados["Mercadona"] = mercadona[0].total||0;
+    informe_resultados["Educacion"] = educacion[0].total||0;
     informe_resultados["Arriendo"] = arriendo[0].total||0;
     informe_resultados["Majo"] = majo[0].total||0;
     informe_resultados["Transporte"] = transporte[0].total||0;
@@ -97,6 +103,8 @@ app.get("/descargar-excel", async (req, res) => {
       ["Concepto", "Total"], // Encabezados
       ["Ingreso", informe_resultados.ingreso],
       ["Ocio", informe_resultados.ocio],
+      ["Mercadona", informe_resultados.mercadona],
+      ["Educacion", informe_resultados.educacion],
       ["Arriendo", informe_resultados.arriendo],
       ["Majo", informe_resultados.majo],
       ["Transporte", informe_resultados.transporte],
@@ -150,7 +158,7 @@ app.get("/login", (req, res) => {
   });
 
 app.get("/register", (req, res) => {
-    res.render("registro.ejs");
+    res.render("registro.ejs", { message: null });
   });
 
   app.post("/login", (req, res, next) => {
@@ -188,7 +196,7 @@ app.get("/logout", (req, res) => {
       const checkResult = await db.all("SELECT * FROM users WHERE email = ?",[email]);
   
       if (checkResult.length > 0) {
-        res.send("Email already exists. Try logging in.");
+        return res.render("registro.ejs", { message: "Este correo ya está registrado. Intenta con otro." });
       } else {
         //hashing the password and saving it in the database
         bcrypt.hash(password, saltRounds, async (err, hash) => {
@@ -338,11 +346,11 @@ app.post("/edit", async (req, res) =>{
       importe = -importe;
     };
     let medio_ingreso = req.body["medio_ingreso"];
-    if (req.body["pagos"] =="pagos"){
+    if (req.body["tipo_dato"] =="pagos"){
         await db.run("UPDATE pagos SET importe = ?, concepto = ?, nombre= ?, fecha = ? WHERE id = ?",[importe,concepto, nombre, fecha, id]);
         res.redirect("/pagos");
 
-    }else if(req.body["tesoreria"] == "tesoreria"){
+    }else if(req.body["tipo_dato"] == "tesoreria"){
         await db.run("UPDATE tesoreria SET importe = ?, concepto = ?, tipo_ingreso= ?, fecha = ?, medio_ingreso = ?  WHERE id = ?",[importe,concepto, tipo_ingreso, fecha, medio_ingreso, id]);
         res.redirect("/tesoreria");
     

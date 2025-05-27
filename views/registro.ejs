@@ -3,7 +3,7 @@
 </section>
 <section class="contenido-login">
     <!-- Makes POST request to /register route -->
-    <form action="/register" method="POST">
+    <form class="btn-excel" action="/register" method="POST">
         <fieldset>
             <div class="form-group">
                 <label for="email">Email</label>
@@ -18,6 +18,12 @@
         
       </form>
         <a href="/login"><h2> o loggeate. </h2></a>
+        <% if (message) { %>
+          <div style="color: red; font-weight: bold;">
+            <%= message %>
+          </div>
+        <% } %>
+        
      
       
 

@@ -6,9 +6,9 @@ body{
 .main{
     height: 100vh;
     display: flex;
-    background-color: #FBFBFB;
+    background-image: url("../images/Fondo.svg");
     gap: 30px;
-    color: #4C585B;
+    color: #074024;
 }
 
 .navbar{
@@ -17,7 +17,7 @@ body{
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #FBFBFB;
+    background-image: url("Fondo.svg");
 }
 
 .contenido{
@@ -35,10 +35,11 @@ body{
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
+    align-items: start;
     gap: 25px;
     padding: 20px;
     background-color: white;
-    box-shadow: 5px 5px 30px;
+    box-shadow: 0px 0px 20px;
 }
 
 .contenido-tabla{
@@ -49,7 +50,7 @@ body{
     min-width: 65%;
     padding: 30px;
     background-color: white;
-    box-shadow: 5px 5px 30px;
+    box-shadow: 0px 0px 30px;
 }
 
 .contenido-login{
@@ -74,9 +75,7 @@ body{
     width: 100%;
     justify-content: space-evenly;
     align-items: center;
-    border-radius: 20px;
     margin: 0px;
-    padding:15px;
     text-align: center;
     overflow: scroll;
 }
@@ -86,7 +85,7 @@ body{
     flex-direction: column;
 }
 
-.card:hover, .card-resultados:hover{
+.card:hover{
     box-shadow: 5px 5px 30px;
 }
 
@@ -101,12 +100,18 @@ a, button a{
 
 h1{
     font-size: 30px;
+    color: #074024;
    
 }
 
 h2{
     font-size: 20px;
+    color: #074024;
    
+}
+
+.gastos{
+    color: red;
 }
 
 #tabla{
@@ -134,11 +139,15 @@ th, td{
 }
 
 th {
-background-color:#4C585B;
+background-color:#074024;;
 color: white;
 position:sticky;
 top:0;
 }
+
+.tabla-movil {
+    display: none;
+  }
 
 .contenido-tabla button, .contenido_patrimonio button, .contenido-login button {
     border-radius: 20px;
@@ -165,13 +174,14 @@ button {
     margin:10px;
     padding: 15px;
     border-radius: 20px;
-    border-color: #5C7285;
-    color:white;
+    border-color: #074024;
     border-style: groove;
+    color:white;
     font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
     font-size: 20px;
-    background-color: #5C7285;
+    background-color: #074024;
     width:200px;
+   
 }
 
 #boton-eliminar, #boton-editar{
@@ -245,9 +255,9 @@ form input[type="submit"] {
    .main{
     display: flex;
     flex-direction: column;
-    background-color: #FBFBFB;
+    background-image: url("../images/Fondo.svg");
     gap: 20px;
-    color: #4C585B;
+    color: #074024;
    }
 
    .navbar{
@@ -256,11 +266,13 @@ form input[type="submit"] {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #FBFBFB;
+    background-image: url("../images/Fondo.svg");
    }
    .contenido{
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
     gap: 20px;
     padding: 20px;
     background-color: white;
@@ -308,13 +320,87 @@ form input[type="submit"] {
         margin:10px;
         padding: 15px;
         border-radius: 20px;
-        border-color: #5C7285;
+        border-color: #074024;
         color:white;
         border-style: groove;
         font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
         font-size: 20px;
-        background-color: #5C7285;
+        background-color: #074024;
         width:200px;
     }
+
+    h1{
+        font-size: 30px;
+        color: #074024;
+        text-align: center;
+       
+    }
+
+    .gastos{
+        color: red;
+    }
+
+    .tabla-movil {
+        display: block;
+    }
+
+    .registro-movil {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        margin-bottom: 10px;
+        padding: 10px;
+        background-color: #f9f9f9;
+    }
+    .registro-movil summary {
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    table {
+        display: none;
+    }
+
+    .btn-mini {
+        font-size: 12px;
+        cursor: pointer;
+        margin:10px;
+        padding: 15px;
+        border-radius: 20px;
+        color:white;
+        border-style: groove;
+        font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+        width:200px;
+      }
+      
+      /* Colores opcionales */
+      .btn-mini.rojo {
+        background-color: #e74c3c;
+        color: white;
+    
+      }
+      
+      .btn-mini.azul {
+        background-color: #3498db;
+        color: white;
+      }
+      
+      .btn-mini:hover {
+        opacity: 0.9;
+      }
+
+      form {
+        background-color:#f9f9f9 ;
+        text-align: center;
+        width:80%;
+    }
+
+    .btn-excel {
+        background-color: white;
+    }
+
+
     
 }

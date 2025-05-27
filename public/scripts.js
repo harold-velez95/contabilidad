@@ -17,6 +17,7 @@ function mostrarFormulario(id, nombre,concepto, importe, fecha){
 };
 
 function mostrarFormularioTesoreria(id, tipo_ingreso,concepto, importe, fecha, medio_ingreso){
+    console.log({ id, fecha }); // para depurar
 
     document.getElementById("form_edit").style.display = "block";
     document.getElementById("id_selected").value = id;
