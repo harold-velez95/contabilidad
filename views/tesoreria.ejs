@@ -55,7 +55,10 @@
                       <input type="hidden" name="id" value="<%= informacion[i].id %>">
                       <button type="submit" class="btn-mini rojo">Eliminar</button>
                     </form>
-                    <button class="btn-mini azul" onclick="mostrarFormularioTesoreria('<%= informacion[i].id %>', '<%= informacion[i].tipo_ingreso %>', '<%= informacion[i].concepto %>', '<%= informacion[i].importe %>', '<%= informacion[i].fecha %>', '<%= informacion[i].medio_ingreso %>')">Editar</button>
+                    <div>
+                        <button class="btn-mini azul" onclick="mostrarFormularioTesoreria('<%= informacion[i].id %>', '<%= informacion[i].tipo_ingreso %>', '<%= informacion[i].concepto %>', '<%= informacion[i].importe %>', '<%= informacion[i].fecha %>', '<%= informacion[i].medio_ingreso %>')">Editar</button>
+                    </div>
+                    
                   </details>
                 <% } %>
               </div>
@@ -108,7 +111,7 @@
         <fieldset>
             <input type="hidden" name="tipo_dato" value="tesoreria">
             <input type="hidden" name="id_selected" id="id_selected">
-            Fecha: <input type="date" name="fecha" id="fecha">
+            Fecha: <input type="text" name="fecha" id="fecha">
             tipo de ingreso: <select name="tipo_ingreso" id="tipo_ingreso">
                 <option value="entrada">Entrada</option>
                 <option value="salida">Salida</option>

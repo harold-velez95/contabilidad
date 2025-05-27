@@ -54,7 +54,9 @@
                       <input type="hidden" name="id" value="<%= informacion[i].id %>">
                       <button type="submit" class="btn-mini rojo">Eliminar</button>
                     </form>
-                    <button class="btn-mini azul" onclick="mostrarFormulario('<%= informacion[i].id %>', '<%= informacion[i].nombre %>', '<%= informacion[i].concepto %>', '<%= informacion[i].importe %>', '<%= informacion[i].fecha %>')">Editar</button>
+                    <div>
+                         <button class="btn-mini azul" onclick="mostrarFormulario('<%= informacion[i].id %>', '<%= informacion[i].nombre %>', '<%= informacion[i].concepto %>', '<%= informacion[i].importe %>', '<%= informacion[i].fecha %>')">Editar</button>
+                    </div>
                   </details>
                 <% } %>
               </div>
@@ -87,7 +89,7 @@
         <fieldset>
             <input type="hidden" name="tipo_dato" value="pagos">
             <input type="hidden" name="id_selected" id="id_selected">
-            <input type="date" name="fecha" id="fecha">
+            <input type="text" name="fecha" id="fecha">
             Nombre: <input type="text" name="nombre" id="nombre">
             Concepto: <select name="concepto" id="concepto">
                 <option>Escoje una opción</option>

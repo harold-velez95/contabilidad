@@ -336,7 +336,6 @@ app.post("/eliminar", async (req, res) =>{
 
 app.post("/edit", async (req, res) =>{
     let fecha = req.body["fecha"];
-    fecha = formatDate(fecha);
     let importe = parseFloat(req.body["importe"]);
     let concepto = req.body["concepto"];
     let nombre = req.body["nombre"];

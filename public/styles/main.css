@@ -399,6 +399,8 @@ form input[type="submit"] {
 
     .btn-excel {
         background-color: white;
+        text-align: center;
+        width:80%;
     }
 
 
