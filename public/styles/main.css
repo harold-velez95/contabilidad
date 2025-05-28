@@ -403,6 +403,33 @@ form input[type="submit"] {
         width:80%;
     }
 
+    .botonera-vertical {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 12px;
+      }
+      
+      /* Ambos contenedores deben comportarse igual */
+      .boton-wrap,
+      .botonera-vertical form {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        max-width: 250px; /* tú eliges el ancho fijo o relativo */
+      }
+      
+      .boton-wrap button,
+      .botonera-vertical form button {
+        width: 100%;         /* Para que ambos botones tengan igual ancho */
+        padding: 10px 20px;
+        font-size: 1rem;
+        box-sizing: border-box;
+      }
+      
+    
+    
+
 
     
 }
