@@ -342,6 +342,7 @@ form input[type="submit"] {
 
     .tabla-movil {
         display: block;
+        text-align: center;
     }
 
     .registro-movil {
@@ -353,10 +354,12 @@ form input[type="submit"] {
         margin-bottom: 10px;
         padding: 10px;
         background-color: #f9f9f9;
+        text-align: center;
     }
     .registro-movil summary {
         cursor: pointer;
         font-weight: bold;
+        text-align: center;
     }
 
     table {
