@@ -51,7 +51,7 @@ async function resultados(user,fecha1, fecha2){
         "Educacion": 0,
         "Salud": 0,
         "Gym": 0,
-        "Barbero": 0
+        "Barbero": 0,
     };
     let ingreso = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Ingreso' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
     let ocio = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Ocio' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
@@ -73,6 +73,7 @@ async function resultados(user,fecha1, fecha2){
     informe_resultados["Salud"] = salud[0].total||0;
     informe_resultados["Gym"] = gym[0].total||0;
     informe_resultados["Barbero"] = barbero[0].total||0;
+    console.log(informe_resultados);
 
     return informe_resultados
 
