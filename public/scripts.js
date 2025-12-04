@@ -3,7 +3,7 @@ function visibilidad(id){
     document.getElementById("tabla").style.display = "none";
 };
 
-function mostrarFormulario(id, nombre,concepto, importe, fecha){
+function mostrarFormulario(id, nombre, concepto, importe, fecha){
 
     document.getElementById("form_edit").style.display = "block";
     document.getElementById("id_selected").value = id;
@@ -39,5 +39,3 @@ function mostrarFormularioTesoreria(id, tipo_ingreso,concepto, importe, fecha, m
       errorMessage.style.display = "none";
     }
   }, 2000);
-
-  

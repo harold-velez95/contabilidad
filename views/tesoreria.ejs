@@ -19,7 +19,7 @@
                     <td><%= informacion[i].fecha %></td>
                     <td><%= informacion[i].concepto %></td>
                     <td><%= informacion[i].medio_ingreso %></td>
-                    <td><%= informacion[i].importe %></td>
+                    <td><%= informacion[i].importe %> €</td>
                     <td><div class="modificacion_content">
                         <form action="/eliminar" method="POST">
                             <input type="hidden" name="tesoreria" value="tesoreria">
@@ -87,8 +87,9 @@
             Concepto:
             <select name="concepto">
                 <option>concepto</option>
-                <option value="Ingreso">Ingreso</option>
-                <option value="Mercadona">Mercadona</option>
+                <option value="Nomina">Nómina</option>
+                <option value="Otros ingresos">Otros ingresos</option>
+                <option value="Comida">Comida</option>
                 <option value="Educacion">Educación</option>
                 <option value="Ocio">Ocio</option>
                 <option value="Arriendo">arriendo</option>
@@ -121,9 +122,10 @@
             </select>
             <select name="concepto" id="concepto">
                 <option>concepto</option>
-                <option value="Ingreso">Ingreso</option>
+                <option value="Nomina">Nómina</option>
+                <option value="Otros ingresos">Otros ingresos</option>
                 <option value="Ocio">Ocio</option>
-                <option value="Mercadona">Mercadona</option>
+                <option value="Comida">Comida</option>
                 <option value="Educacion">Educación</option>
                 <option value="Arriendo">arriendo</option>
                 <option value="Majo">Majo</option>
@@ -140,7 +142,10 @@
                 <option value="Cuenta crypto">Cuenta crypto</option>
             </select>
             Importe: <input type="number" name="importe" min="0" step="0.01" placeholder="importe" id="importe" required>
-            <button type="submit">Editar</button>
+            <div>
+                <button type="submit">Editar</button>
+                <a href="/tesoreria"><button type="button">Cancelar</button></a>
+            </div>
         </fieldset>
         
     </form>

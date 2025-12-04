@@ -1,44 +1,115 @@
 <%- include("partials/header.ejs") %>
-   <h1>Resultados</h1>
-   <a href="/"><button type="button" class="navbutton">Página de inicio</button></a>
+
+<h1>Resultados</h1>
+<a href="/"><button type="button" class="navbutton">Página de inicio</button></a>
+
 </section>
+
 <section class="contenido_patrimonio">
-    <% if (locals.informe_resultados && locals.fecha1 && locals.fecha2){ %>
-        <h1>Desde <span style="font-weight: bolder;">"<%= fecha1 %>"</span> hasta <span style="font-weight: bolder;">"<%= fecha2 %>"</span></h1>
-            <div class="card-resultados">
-                <div class="card-r-h">
-                    <h2>Ingresos totales: <%= informe_resultados["Ingreso"]  %> €</h2>
-                    <h2 class="gastos">gastos en Arriendo: <%= informe_resultados["Arriendo"]  %> €</h2>
-                    <hr/>
-                </div>
-                <div class="card-r-h">
-                    <h2 class="gastos">Majo: <%= informe_resultados["Majo"]  %> €</h2>
-                    <h2 class="gastos">Ocio: <%= informe_resultados["Ocio"]  %> €</h2>
-                    <h2 class="gastos">Mercadona: <%= informe_resultados["Mercadona"]  %> €</h2>
-                    <h2 class="gastos">Educación: <%= informe_resultados["Educacion"]  %> €</h2>
-                    <h2 class="gastos">Salud: <%= informe_resultados["Salud"]  %> €</h2>
-                    <h2 class="gastos">Transporte: <%= informe_resultados["Transporte"]  %> €</h2>
-                    <h2 class="gastos">Gym: <%= informe_resultados["Gym"]  %> €</h2>
-                    <h2 class="gastos">Barbero: <%= informe_resultados["Barbero"]  %> €</h2>
-                    <hr/>
-                    <h1>Margen neto: <%= informe_resultados["Ingreso"]+ informe_resultados["Ocio"]+ informe_resultados["Arriendo"]+ informe_resultados["Mercadona"]+ informe_resultados["Educacion"] +informe_resultados["Salud"]+ informe_resultados["Majo"]+ informe_resultados["Transporte"]+ informe_resultados["Gym"]+ informe_resultados["Barbero"]  %> €</h1>
-                </div>
-            </div>
-            <!-- Botón para descargar el Excel -->
-            <form class="btn-excel" action="/descargar-excel" method="GET">
-                <button type="submit">Descargar Excel</button>
-            </form>
-                <% } else { %>
-                    <form class="btn-excel" action="/resultados" method="POST" id="form_cobros">
-                        <fieldset>
-                            indique la fecha de inicio: <input type="date" name="fecha1">
-                            indique la fecha de fin: <input type="date" name="fecha2">
-                            <button type="submit">Buscar</button>
-                        </fieldset>
-                    </form>
-        
-                <% } %>
-    </section>
-   <script src="scripts.js"></script>
+
+<% if (locals.informe_resultados && locals.fecha1Formateada && locals.fecha2Formateada) { %>
+
+  <h1>
+    <span style="font-weight: bolder;"><%= fecha1Formateada %> - </span>
+    <span style="font-weight: bolder;"><%= fecha2Formateada %></span>
+  </h1>
+
+  <% 
+    const totales = Object.values(informe_resultados);
+    const hayDatos = totales.some(v => v !== 0);
+  %>
+
+  <% if (!hayDatos) { %>
+    <!-- 📭 MENSAJE SIN DATOS -->
+    <div class="mensaje-vacio">
+      <h1>No hay datos para mostrar 📭</h1>
+      <p>No se registraron movimientos en este rango de fechas.</p>
+      <a href="/resultados"><button type="button">Elegir otro rango</button></a>
+    </div>
+  <% } else { %>
+
+    <div class="contenido_grafico">
+      <!-- 📊 GRÁFICO DE PASTEL -->
+      <div style="max-width:600px; margin:40px auto;">
+        <canvas id="graficoPastel"></canvas>
+      </div>
+
+      <!-- 📥 Botón Descargar Excel -->
+      <form class="btn-excel" action="/descargar-pdf" method="GET">
+        <button type="submit">Descargar PDF</button>
+        <a href="/resultados"><button type="button">Elegir otro rango</button></a>
+      </form>
+    </div>
+
+  <% } %>
+
+<% } else { %>
+
+  <!-- 📅 FORMULARIO FECHAS -->
+  <div class="form_resultados">
+    <form class="btn-excel" action="/resultados" method="POST">
+      <fieldset>
+        indique la fecha de inicio:
+        <input type="date" name="fecha1" required>
+
+        indique la fecha de fin:
+        <input type="date" name="fecha2" required>
+
+        <button type="submit">Buscar</button>
+      </fieldset>
+    </form>
+  </div>
+
+<% } %>
+
+</section>
+
+<!-- ✅ Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<% if (locals.informe_resultados) { %>
+<script>
+  const datos = <%- JSON.stringify(informe_resultados) %>;
+
+  const labels = [];
+  const valores = [];
+
+  for (const [concepto, total] of Object.entries(datos)) {
+    if (total !== 0) {
+      labels.push(concepto);
+      valores.push(Math.abs(total));
+    }
+  }
+
+  // ✅ Solo crear el gráfico si realmente hay datos
+  if (valores.length > 0) {
+    const ctx = document.getElementById("graficoPastel");
+
+    new Chart(ctx, {
+      type: "pie",
+      data: {
+        labels: labels,
+        datasets: [{
+          data: valores,
+          backgroundColor: [
+            "#4CAF50","#81C784","#FF7043","#9575CD",
+            "#64B5F6","#FFB74D","#AED581","#E57373",
+            "#BA68C8","#90A4AE","#FFCC80"
+          ]
+        }]
+      },
+      options: {
+        responsive: true,
+        plugins: {
+          legend: {
+            position: "bottom"
+          }
+        }
+      }
+    });
+  }
+</script>
+<% } %>
+
 </body>
 </html>

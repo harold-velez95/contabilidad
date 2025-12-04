@@ -8,7 +8,7 @@ import bcrypt from "bcrypt";
 import session from "express-session";
 import passport from "passport";
 import { Strategy } from "passport-local";
-import XLSX from "xlsx";
+import PDFDocument from "pdfkit";
 import fs from "fs";
 
 // Configurar __dirname en módulos ES6
@@ -42,20 +42,22 @@ const db = await open({
 
 async function resultados(user,fecha1, fecha2){
     let informe_resultados ={
-        "Ingreso": 0,
+        "Nomina": 0,
+        "Otros ingresos": 0,
         "Ocio": 0,
         "Arriendo" : 0,
         "Majo": 0,
         "Transporte": 0,
-        "Mercadona": 0,
+        "Comida": 0,
         "Educacion": 0,
         "Salud": 0,
         "Gym": 0,
         "Barbero": 0,
     };
-    let ingreso = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Ingreso' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
+    let ingreso = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Nomina' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
+    let otros_ingresos = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Otros ingresos' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
     let ocio = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Ocio' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
-    let mercadona = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Mercadona' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
+    let mercadona = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Comida' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
     let educacion = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Educacion' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
     let arriendo = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Arriendo' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
     let majo = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Majo' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
@@ -63,9 +65,10 @@ async function resultados(user,fecha1, fecha2){
     let salud = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Salud' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
     let gym = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Gym' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
     let barbero = await db.all("SELECT SUM(importe) AS total FROM tesoreria WHERE concepto = 'Barbero' and user_id = ? and fecha between  ? and ? ",[user,fecha1, fecha2]);
-    informe_resultados["Ingreso"] = ingreso[0].total||0;
+    informe_resultados["Nomina"] = ingreso[0].total||0;
+    informe_resultados["Otros ingresos"] = otros_ingresos[0].total||0;
     informe_resultados["Ocio"] = ocio[0].total||0;
-    informe_resultados["Mercadona"] = mercadona[0].total||0;
+    informe_resultados["Comida"] = mercadona[0].total||0;
     informe_resultados["Educacion"] = educacion[0].total||0;
     informe_resultados["Arriendo"] = arriendo[0].total||0;
     informe_resultados["Majo"] = majo[0].total||0;
@@ -73,77 +76,117 @@ async function resultados(user,fecha1, fecha2){
     informe_resultados["Salud"] = salud[0].total||0;
     informe_resultados["Gym"] = gym[0].total||0;
     informe_resultados["Barbero"] = barbero[0].total||0;
-    console.log(informe_resultados);
 
     return informe_resultados
 
 };
 
-function formatDate(inputDate) {
-  const date = new Date(inputDate); // Convierte el string a objeto Date
-  const formatter = new Intl.DateTimeFormat('es-ES', { month: 'long', day: 'numeric' });
-  return formatter.format(date);
-};
+function formatearFecha(fecha) {
+  return new Intl.DateTimeFormat("es-ES", {
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  }).format(new Date(fecha));
+}
 
-app.get("/descargar-excel", async (req, res) => {
-  if(req.isAuthenticated()){
-    const userId = req.user.id;
-  if (!userId) return res.status(403).send("No autorizado.");
+app.get("/descargar-pdf", async (req, res) => {
+  if (!req.isAuthenticated()) return res.redirect("/login");
 
-  const informe_resultados = req.session.informe_resultados || {};
-  const cuentasCobrar = await db.all("SELECT * FROM cobros WHERE user_id = ?", [userId]);
-  const cuentasPagar = await db.all("SELECT * FROM pagos WHERE user_id = ?", [userId]);
-  const tesoreria = await db.all("SELECT * FROM tesoreria WHERE user_id = ?", [userId]);
+  const informe = req.session.informe_resultados;
+  if (!informe) return res.status(400).send("No hay datos para exportar");
 
-  if (!informe_resultados) {
-      return res.status(400).send("No hay datos para exportar.");
+  const userId = req.user.id;
+
+  // 🔹 Balance patrimonial actual
+  const entradas = await db.get(`
+    SELECT COALESCE(SUM(importe),0) AS total 
+    FROM tesoreria 
+    WHERE tipo_ingreso='entrada' AND user_id=?`,
+    [userId]
+  );
+
+  const salidas = await db.get(`
+    SELECT COALESCE(SUM(importe),0) AS total 
+    FROM tesoreria 
+    WHERE tipo_ingreso='salida' AND user_id=?`,
+    [userId]
+  );
+
+  const balanceActual = entradas.total + salidas.total;
+
+  // 🔹 Margen neto del periodo
+  const margenNeto = Object.values(informe)
+    .reduce((acc, val) => acc + val, 0);
+
+  // ✅ Crear PDF
+  const doc = new PDFDocument({ margin: 50 });
+
+  res.setHeader("Content-Type", "application/pdf");
+  res.setHeader(
+    "Content-Disposition",
+    "attachment; filename=reporte-financiero.pdf"
+  );
+
+  doc.pipe(res);
+
+  // 🧾 TÍTULO
+  doc
+    .fontSize(20)
+    .text("Reporte Financiero", { align: "center" })
+    .moveDown();
+
+  // 📅 PERIODO
+  doc
+    .fontSize(12)
+    .text("Periodo analizado:", { underline: true })
+    .moveDown(0.5);
+
+  doc.text(`Desde: ${req.session.fecha1Formateada || "N/A"}`);
+  doc.text(`Hasta: ${req.session.fecha2Formateada || "N/A"}`);
+  doc.moveDown();
+
+  // 📊 DETALLE POR CONCEPTO
+  doc
+    .fontSize(14)
+    .text("Detalle por concepto", { underline: true })
+    .moveDown();
+
+  for (const [concepto, total] of Object.entries(informe)) {
+    if (total !== 0) {
+      doc
+        .fontSize(11)
+        .text(`${concepto}: ${total.toFixed(2)} €`);
+    }
   }
 
-  // Crear los datos para la hoja de Excel
-  const data = [
-      ["Concepto", "Total"], // Encabezados
-      ["Ingreso", informe_resultados.ingreso],
-      ["Ocio", informe_resultados.ocio],
-      ["Mercadona", informe_resultados.mercadona],
-      ["Educacion", informe_resultados.educacion],
-      ["Arriendo", informe_resultados.arriendo],
-      ["Majo", informe_resultados.majo],
-      ["Transporte", informe_resultados.transporte],
-      ["Salud", informe_resultados.salud],
-      ["Gym", informe_resultados.gym],
-      ["Barbero", informe_resultados.barbero]
-  ];
+  doc.moveDown();
 
-  // Crear un libro de Excel
-  const workbook = XLSX.utils.book_new();
-  const worksheet = XLSX.utils.aoa_to_sheet(data);
-  XLSX.utils.book_append_sheet(workbook, worksheet, "Resultados");
+  // 💰 MARGEN NETO
+  doc
+    .fontSize(14)
+    .text("Resultado del período", { underline: true })
+    .moveDown();
 
-  // 📄 **Agregar Hoja de Cuentas por Cobrar**
-    const dataCobrar = [["ID", "Cliente", "Monto", "Fecha", "concepto"], ...cuentasCobrar.map(c => [c.id, c.nombre, c.importe, c.fecha, c.concepto])];
-    const wsCobrar = XLSX.utils.aoa_to_sheet(dataCobrar);
-    XLSX.utils.book_append_sheet(workbook, wsCobrar, "Cuentas por Cobrar");
+  doc
+    .fontSize(12)
+    .text(`Margen neto del período: ${margenNeto.toFixed(2)} €`);
 
-    // 📄 **Agregar Hoja de Cuentas por Pagar**
-    const dataPagar = [["ID", "Proveedor", "Monto", "Fecha", "concepto"], ...cuentasPagar.map(p => [p.id, p.nombre, p.importe, p.fecha, p.concepto])];
-    const wsPagar = XLSX.utils.aoa_to_sheet(dataPagar);
-    XLSX.utils.book_append_sheet(workbook, wsPagar, "Cuentas por Pagar");
+  doc.moveDown();
 
+  // 🏦 BALANCE ACTUAL
+  doc
+    .fontSize(14)
+    .text("Balance patrimonial actual", { underline: true })
+    .moveDown();
 
-    // 📄 **Agregar Hoja de Tesorería**
-    const dataTesoreria = [["ID", "Concepto", "Monto", "Fecha", "medio de ingreso"], ...tesoreria.map(t => [t.id, t.concepto, t.importe, t.fecha, t.medio_ingreso])];
-    const wsTesoreria = XLSX.utils.aoa_to_sheet(dataTesoreria);
-    XLSX.utils.book_append_sheet(workbook, wsTesoreria, "Tesorería");
+  doc
+    .fontSize(12)
+    .text(`Balance total a fecha actual: ${balanceActual.toFixed(2)} €`);
 
-  // Enviar el archivo Excel como descarga
-  res.setHeader("Content-Disposition", "attachment; filename=resultado.xlsx");
-  res.setHeader("Content-Type", "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
-
-  const buffer = XLSX.write(workbook, { type: "buffer", bookType: "xlsx" });
-  res.send(buffer);
-
-  }
+  // ✅ Finalizar
+  doc.end();
 });
+
 
 
 app.get("/", (req, res) =>{
@@ -258,11 +301,12 @@ app.route("/resultados")
     .post(async(req,res) => {
         let fecha1 = req.body["fecha1"]
         let fecha2 = req.body["fecha2"]
-        fecha1 = formatDate(fecha1);
-        fecha2 = formatDate(fecha2); 
         let informe_resultados = await resultados(req.user.id,fecha1, fecha2); 
+        req.session.fecha1Formateada = formatearFecha(fecha1);
+        req.session.fecha2Formateada = formatearFecha(fecha2);
         req.session.informe_resultados = informe_resultados;
-        res.render("resultados.ejs",{informe_resultados : informe_resultados, fecha1 : fecha1, fecha2: fecha2})});
+        res.render("resultados.ejs",{informe_resultados : informe_resultados, fecha1Formateada: formatearFecha(fecha1),
+          fecha2Formateada: formatearFecha(fecha2)})});
     
 
 app.get("/patrimonio", async (req, res) =>{
@@ -292,7 +336,6 @@ app.post("/post", (req,res) =>{
     let concepto = req.body["concepto"];
     let medio_ingreso = req.body["medio_ingreso"];
     let fecha = req.body["fecha"];
-    fecha = formatDate(fecha);
     let importe = parseFloat(req.body["importe"]);
     if (tipo_ingreso === "salida"){
        importe = -importe;
